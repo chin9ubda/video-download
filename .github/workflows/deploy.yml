@@ -1,0 +1,20 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t video-downloader:latest .
+
+      - name: Deploy
+        run: |
+          docker stop video-downloader || true
+          docker rm video-downloader || true
+          docker compose up -d
