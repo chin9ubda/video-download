@@ -14,240 +14,143 @@
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+        .container { max-width: 720px; margin: 0 auto; padding: 40px 20px; }
 
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #fff;
-        }
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+        .subtitle { color: #888; margin-bottom: 32px; font-size: 14px; }
 
-        .subtitle {
-            color: #888;
-            margin-bottom: 32px;
-            font-size: 14px;
-        }
-
-        /* Input area */
-        .input-group {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
+        .input-group { display: flex; gap: 8px; margin-bottom: 24px; }
 
         .input-group input {
-            flex: 1;
-            padding: 14px 16px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 15px;
-            outline: none;
-            transition: border-color 0.2s;
+            flex: 1; padding: 14px 16px; background: #1a1a1a;
+            border: 1px solid #333; border-radius: 8px; color: #fff;
+            font-size: 15px; outline: none; transition: border-color 0.2s;
         }
-
-        .input-group input:focus {
-            border-color: #4a9eff;
-        }
-
-        .input-group input::placeholder {
-            color: #555;
-        }
+        .input-group input:focus { border-color: #4a9eff; }
+        .input-group input::placeholder { color: #555; }
 
         .btn {
-            padding: 14px 28px;
-            background: #4a9eff;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
+            padding: 14px 28px; background: #4a9eff; color: #fff; border: none;
+            border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;
+            transition: background 0.2s; white-space: nowrap;
         }
-
         .btn:hover { background: #3a8eef; }
         .btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+        .btn.green { background: #34c759; }
+        .btn.green:hover { background: #2db84e; }
+        .btn.green:disabled { background: #333; color: #666; }
+
+        /* Analysis result card */
+        .analyze-card {
+            background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px;
+            padding: 20px; margin-bottom: 16px; animation: fadeIn 0.3s;
+        }
+        .analyze-title { font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 14px; }
+        .analyze-error { color: #ff6b6b; font-size: 14px; }
+
+        .check-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px; background: #222; border-radius: 8px; margin-bottom: 8px;
+            cursor: pointer; transition: background 0.15s;
+        }
+        .check-item:hover { background: #2a2a2a; }
+
+        .check-item input[type="checkbox"] {
+            width: 18px; height: 18px; accent-color: #4a9eff; cursor: pointer; flex-shrink: 0;
+        }
+        .check-item .item-info { flex: 1; min-width: 0; }
+        .check-item .item-name { font-size: 14px; color: #ddd; word-break: break-all; }
+        .check-item .item-meta { font-size: 12px; color: #777; margin-top: 2px; }
+
+        .item-filename {
+            display: flex; align-items: center; gap: 4px; margin-top: 6px;
+        }
+        .item-filename input {
+            flex: 1; padding: 5px 8px; background: #1a1a1a; border: 1px solid #444;
+            border-radius: 4px; color: #fff; font-size: 13px; outline: none;
+            min-width: 0;
+        }
+        .item-filename input:focus { border-color: #4a9eff; }
+        .item-filename .ext { font-size: 13px; color: #666; white-space: nowrap; }
+
+        .analyze-actions {
+            display: flex; justify-content: space-between; align-items: center; margin-top: 14px;
+        }
+        .select-all-label { font-size: 13px; color: #888; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .select-all-label input { accent-color: #4a9eff; cursor: pointer; }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block; width: 16px; height: 16px;
+            border: 2px solid #555; border-top-color: #4a9eff;
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+            vertical-align: middle; margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Task card */
         .task-card {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 12px;
-            animation: fadeIn 0.3s;
+            background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px;
+            padding: 20px; margin-bottom: 12px; animation: fadeIn 0.3s;
         }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .task-title { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+        .task-message { font-size: 13px; color: #aaa; margin-bottom: 10px; }
 
-        .task-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 4px;
-            word-break: break-all;
-        }
-
-        .task-url {
-            font-size: 12px;
-            color: #555;
-            margin-bottom: 12px;
-            word-break: break-all;
-        }
-
-        .task-message {
-            font-size: 13px;
-            color: #aaa;
-            margin-bottom: 10px;
-        }
-
-        /* Progress bar */
-        .progress-wrap {
-            background: #2a2a2a;
-            border-radius: 6px;
-            height: 8px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-
+        .progress-wrap { background: #2a2a2a; border-radius: 6px; height: 8px; overflow: hidden; margin-bottom: 8px; }
         .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #4a9eff, #6db3ff);
-            border-radius: 6px;
-            transition: width 0.4s ease;
-            width: 0%;
+            height: 100%; background: linear-gradient(90deg, #4a9eff, #6db3ff);
+            border-radius: 6px; transition: width 0.4s ease; width: 0%;
         }
+        .progress-bar.done { background: linear-gradient(90deg, #34c759, #5dd87a); }
+        .progress-bar.error { background: #ff3b30; }
+        .progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #666; }
 
-        .progress-bar.done {
-            background: linear-gradient(90deg, #34c759, #5dd87a);
-        }
-
-        .progress-bar.error {
-            background: #ff3b30;
-        }
-
-        .progress-bar.analyzing {
-            background: linear-gradient(90deg, #ff9f0a, #ffb340);
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* Download link */
         .download-link {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 16px;
-            background: #1e3a1e;
-            border: 1px solid #2d5a2d;
-            border-radius: 6px;
-            color: #5dd87a;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: background 0.2s;
+            display: inline-block; margin-top: 10px; padding: 8px 16px;
+            background: #1e3a1e; border: 1px solid #2d5a2d; border-radius: 6px;
+            color: #5dd87a; text-decoration: none; font-size: 13px; font-weight: 500;
         }
-
-        .download-link:hover {
-            background: #2a4a2a;
-        }
-
-        .error-msg {
-            color: #ff6b6b;
-            font-size: 13px;
-            margin-top: 4px;
-        }
+        .download-link:hover { background: #2a4a2a; }
+        .error-msg { color: #ff6b6b; font-size: 13px; }
 
         /* File list */
         .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #fff;
-            margin: 32px 0 12px;
-            padding-top: 20px;
-            border-top: 1px solid #222;
+            font-size: 18px; font-weight: 600; color: #fff;
+            margin: 32px 0 12px; padding-top: 20px; border-top: 1px solid #222;
         }
-
-        .file-list {
-            list-style: none;
-        }
-
+        .file-list { list-style: none; }
         .file-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            margin-bottom: 6px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 16px; background: #1a1a1a; border: 1px solid #2a2a2a;
+            border-radius: 8px; margin-bottom: 6px;
         }
-
-        .file-name {
-            font-size: 14px;
-            color: #ccc;
-            word-break: break-all;
-            flex: 1;
-        }
-
-        .file-size {
-            font-size: 12px;
-            color: #666;
-            margin-left: 12px;
-            white-space: nowrap;
-        }
-
+        .file-name { font-size: 14px; color: #ccc; word-break: break-all; flex: 1; }
+        .file-size { font-size: 12px; color: #666; margin-left: 12px; white-space: nowrap; }
         .file-dl {
-            margin-left: 12px;
-            padding: 4px 12px;
-            background: #2a2a2a;
-            border: 1px solid #3a3a3a;
-            border-radius: 4px;
-            color: #4a9eff;
-            text-decoration: none;
-            font-size: 12px;
-            white-space: nowrap;
+            margin-left: 12px; padding: 4px 12px; background: #2a2a2a;
+            border: 1px solid #3a3a3a; border-radius: 4px; color: #4a9eff;
+            text-decoration: none; font-size: 12px; white-space: nowrap;
         }
-
         .file-dl:hover { background: #333; }
-
         .empty { color: #555; font-size: 13px; padding: 12px 0; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Video Downloader</h1>
-        <p class="subtitle">URL을 입력하면 동영상을 다운로드합니다</p>
+        <p class="subtitle">URL을 입력하고 분석 후 다운로드할 파일을 선택하세요</p>
 
         <div class="input-group">
             <input type="text" id="urlInput" placeholder="https://example.com/video-page" autocomplete="off">
-            <button class="btn" id="downloadBtn" onclick="startDownload()">다운로드</button>
+            <button class="btn" id="analyzeBtn" onclick="analyze()">분석</button>
         </div>
 
+        <div id="analyzeResult"></div>
         <div id="tasks"></div>
 
-        <div class="section-title">다운로드 파일</div>
+        <div class="section-title">다운로드 완료</div>
         <ul class="file-list" id="fileList">
             <li class="empty">파일이 없습니다</li>
         </ul>
@@ -255,61 +158,147 @@
 
     <script>
         const urlInput = document.getElementById('urlInput');
-        const downloadBtn = document.getElementById('downloadBtn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const analyzeResult = document.getElementById('analyzeResult');
         const tasksContainer = document.getElementById('tasks');
 
-        urlInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') startDownload();
-        });
+        let lastAnalysis = null;
 
+        urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') analyze(); });
         loadFiles();
 
-        function startDownload() {
+        function analyze() {
             const url = urlInput.value.trim();
             if (!url) return;
 
-            downloadBtn.disabled = true;
-            urlInput.value = '';
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<span class="spinner"></span>분석 중';
+            analyzeResult.innerHTML = '';
 
-            fetch('/api/download', {
+            fetch('/api/analyze', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url }),
             })
             .then(r => r.json())
             .then(data => {
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = '분석';
+
                 if (data.error) {
-                    alert(data.error);
-                    downloadBtn.disabled = false;
+                    analyzeResult.innerHTML = `<div class="analyze-card"><span class="analyze-error">${esc(data.error)}</span></div>`;
                     return;
                 }
-                createTaskCard(data.task_id, url);
-                listenTask(data.task_id);
-                downloadBtn.disabled = false;
+
+                lastAnalysis = data;
+                renderAnalysis(data);
             })
             .catch(() => {
-                alert('서버 연결에 실패했습니다.');
-                downloadBtn.disabled = false;
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = '분석';
+                analyzeResult.innerHTML = '<div class="analyze-card"><span class="analyze-error">서버 연결에 실패했습니다.</span></div>';
             });
         }
 
-        function createTaskCard(taskId, url) {
+        function renderAnalysis(data) {
+            const items = data.items;
+            if (!items.length) {
+                analyzeResult.innerHTML = '<div class="analyze-card"><span class="analyze-error">동영상을 찾지 못했습니다.</span></div>';
+                return;
+            }
+
+            const hasSubtitle = items.some(i => i.subtitle_url);
+
+            let html = `<div class="analyze-card">`;
+            html += `<div class="analyze-title">${esc(data.page_title)}</div>`;
+
+            items.forEach((item, i) => {
+                const size = item.size ? formatSize(item.size) : '크기 불명';
+                const sub = item.subtitle_url ? ' + 자막' : '';
+                const ext = getExt(item.video_url);
+                html += `
+                    <div class="check-item" onclick="event.target.tagName==='INPUT'&&event.target.type!=='checkbox'||void 0">
+                        <input type="checkbox" checked data-idx="${i}">
+                        <div class="item-info">
+                            <div class="item-filename">
+                                <input type="text" value="${esc(item.title)}" data-name="${i}" onclick="event.stopPropagation()">
+                                <span class="ext">.${ext}</span>
+                            </div>
+                            <div class="item-meta">${size}${sub}</div>
+                        </div>
+                    </div>`;
+            });
+
+            html += `<div class="analyze-actions">`;
+            if (items.length > 1) {
+                html += `<label class="select-all-label"><input type="checkbox" checked onchange="toggleAll(this)"> 전체 선택</label>`;
+            } else {
+                html += `<span></span>`;
+            }
+            html += `<button class="btn green" onclick="startSelected()">다운로드 시작</button>`;
+            html += `</div></div>`;
+
+            analyzeResult.innerHTML = html;
+        }
+
+        function toggleAll(el) {
+            document.querySelectorAll('.check-item input[type="checkbox"][data-idx]')
+                .forEach(cb => cb.checked = el.checked);
+        }
+
+        function startSelected() {
+            if (!lastAnalysis) return;
+
+            const checked = [];
+            document.querySelectorAll('.check-item input[type="checkbox"][data-idx]').forEach(cb => {
+                if (cb.checked) checked.push(parseInt(cb.dataset.idx));
+            });
+
+            if (checked.length === 0) {
+                alert('다운로드할 항목을 선택해주세요.');
+                return;
+            }
+
+            const items = checked.map(i => {
+                const item = { ...lastAnalysis.items[i] };
+                const nameInput = document.querySelector(`input[data-name="${i}"]`);
+                if (nameInput) item.title = nameInput.value.trim() || item.title;
+                return item;
+            });
+            analyzeResult.innerHTML = '';
+            lastAnalysis = null;
+            urlInput.value = '';
+
+            fetch('/api/download', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items }),
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) { alert(data.error); return; }
+                data.task_ids.forEach((tid, i) => {
+                    createTaskCard(tid, items[i].title);
+                    listenTask(tid);
+                });
+            });
+        }
+
+        function createTaskCard(taskId, title) {
             const card = document.createElement('div');
             card.className = 'task-card';
             card.id = `task-${taskId}`;
             card.innerHTML = `
-                <div class="task-title" id="title-${taskId}">분석 중...</div>
-                <div class="task-url">${escapeHtml(url)}</div>
+                <div class="task-title" id="title-${taskId}">${esc(title)}</div>
                 <div class="task-message" id="msg-${taskId}">대기 중...</div>
                 <div class="progress-wrap">
-                    <div class="progress-bar analyzing" id="bar-${taskId}" style="width: 100%"></div>
+                    <div class="progress-bar" id="bar-${taskId}" style="width: 0%"></div>
                 </div>
                 <div class="progress-info">
                     <span id="size-${taskId}"></span>
                     <span id="pct-${taskId}"></span>
                 </div>
-                <div id="action-${taskId}"></div>
-            `;
+                <div id="action-${taskId}"></div>`;
             tasksContainer.prepend(card);
         }
 
@@ -323,9 +312,7 @@
                     if (d.status === 'done') loadFiles();
                 }
             };
-            es.onerror = () => {
-                es.close();
-            };
+            es.onerror = () => es.close();
         }
 
         function updateTaskCard(taskId, d) {
@@ -335,58 +322,42 @@
             const size = document.getElementById(`size-${taskId}`);
             const pct = document.getElementById(`pct-${taskId}`);
             const action = document.getElementById(`action-${taskId}`);
-
             if (!title) return;
 
             if (d.title) title.textContent = d.title;
             if (d.message) msg.textContent = d.message;
             if (d.error) {
-                msg.innerHTML = `<span class="error-msg">${escapeHtml(d.error)}</span>`;
+                msg.innerHTML = `<span class="error-msg">${esc(d.error)}</span>`;
                 bar.className = 'progress-bar error';
                 bar.style.width = '100%';
                 return;
             }
 
-            if (d.status === 'analyzing') {
-                bar.className = 'progress-bar analyzing';
-                bar.style.width = '100%';
-            } else if (d.status === 'downloading') {
+            if (d.status === 'downloading') {
                 bar.className = 'progress-bar';
                 bar.style.width = d.progress + '%';
-                if (d.total_size) {
-                    size.textContent = formatSize(d.downloaded) + ' / ' + formatSize(d.total_size);
-                }
+                if (d.total_size) size.textContent = formatSize(d.downloaded) + ' / ' + formatSize(d.total_size);
                 pct.textContent = d.progress + '%';
             } else if (d.status === 'done') {
                 bar.className = 'progress-bar done';
                 bar.style.width = '100%';
                 pct.textContent = '100%';
-                if (d.total_size) {
-                    size.textContent = formatSize(d.total_size);
-                }
-                if (d.filename) {
-                    action.innerHTML = `<a class="download-link" href="/api/files/${encodeURIComponent(d.filename)}">파일 저장</a>`;
-                }
+                if (d.total_size) size.textContent = formatSize(d.total_size);
+                if (d.filename) action.innerHTML = `<a class="download-link" href="/api/files/${encodeURIComponent(d.filename)}">파일 저장</a>`;
             }
         }
 
         function loadFiles() {
-            fetch('/api/files')
-                .then(r => r.json())
-                .then(files => {
-                    const list = document.getElementById('fileList');
-                    if (files.length === 0) {
-                        list.innerHTML = '<li class="empty">파일이 없습니다</li>';
-                        return;
-                    }
-                    list.innerHTML = files.map(f => `
-                        <li class="file-item">
-                            <span class="file-name">${escapeHtml(f.name)}</span>
-                            <span class="file-size">${formatSize(f.size)}</span>
-                            <a class="file-dl" href="/api/files/${encodeURIComponent(f.name)}">저장</a>
-                        </li>
-                    `).join('');
-                });
+            fetch('/api/files').then(r => r.json()).then(files => {
+                const list = document.getElementById('fileList');
+                if (!files.length) { list.innerHTML = '<li class="empty">파일이 없습니다</li>'; return; }
+                list.innerHTML = files.map(f => `
+                    <li class="file-item">
+                        <span class="file-name">${esc(f.name)}</span>
+                        <span class="file-size">${formatSize(f.size)}</span>
+                        <a class="file-dl" href="/api/files/${encodeURIComponent(f.name)}">저장</a>
+                    </li>`).join('');
+            });
         }
 
         function formatSize(bytes) {
@@ -397,7 +368,14 @@
             return (bytes / 1073741824).toFixed(2) + ' GB';
         }
 
-        function escapeHtml(str) {
+        function getExt(url) {
+            const path = (url || '').split('?')[0];
+            const parts = path.split('.');
+            const ext = parts.length > 1 ? parts.pop() : 'mp4';
+            return ext.length <= 5 ? ext : 'mp4';
+        }
+
+        function esc(str) {
             const d = document.createElement('div');
             d.textContent = str;
             return d.innerHTML;

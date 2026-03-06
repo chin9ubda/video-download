@@ -45,7 +45,8 @@ def extract_video_from_html(url: str) -> dict:
 
     raw_url = player_data.get("url", "")
     vod_name = player_data.get("vod_data", {}).get("vod_name", "")
-    if vod_name:
+    # 페이지 title이 generic이면 vod_name을 fallback으로 사용
+    if vod_name and title == "video":
         title = vod_name
 
     video_url, subtitle_url = _parse_video_url(raw_url)
@@ -77,8 +78,9 @@ def _extract_title(html: str) -> str:
     match = re.search(r"<title>(.*?)</title>", html)
     if match:
         title = match.group(1).strip()
-        # " - 사이트명" 부분 제거
-        title = re.split(r"\s*[-|]\s*(?:무료|티비|다시보기)", title)[0].strip()
+        # " - 사이트명" 부분 제거, "다시보기" 등 불필요한 접미사 제거
+        title = re.split(r"\s*[-|]\s*(?:무료|티비)", title)[0].strip()
+        title = re.sub(r"\s*다시보기\s*$", "", title).strip()
         title = re.sub(r'[\\/:*?"<>|]', '_', title)
         return title if title else "video"
     return "video"
