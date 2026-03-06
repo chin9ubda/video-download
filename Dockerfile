@@ -23,8 +23,12 @@ COPY server.py .
 COPY downloader/ downloader/
 COPY templates/ templates/
 
-# downloads 디렉토리 (볼륨 마운트 포인트)
-RUN mkdir -p /app/downloads
+# 호스트 사용자와 UID를 맞춘 non-root 사용자
+RUN useradd -m -u 1000 appuser \
+    && mkdir -p /app/downloads \
+    && chown -R appuser:appuser /app
+
+USER appuser
 
 EXPOSE 5000
 

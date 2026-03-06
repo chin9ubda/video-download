@@ -23,6 +23,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 app = Flask(__name__)
 
 DOWNLOAD_DIR = os.environ.get("DOWNLOAD_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads"))
+FINAL_DIR = os.environ.get("FINAL_DIR", "")
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 UA = (
@@ -227,12 +228,16 @@ def _run_download(task_id: str, item: dict):
         sub_filename = _download_subtitle_file(subtitle_url, title)
         if sub_filename:
             downloaded_files.add(sub_filename)
+        _move_to_final_dir(task["filename"])
+        if sub_filename:
+            _move_to_final_dir(sub_filename)
         task["status"] = "done"
         task["message"] = "다운로드 완료!"
         task["progress"] = 100
     else:
-        task["status"] = "error"
-        task["error"] = "다운로드에 실패했습니다."
+        if task.get("status") != "cancelled":
+            task["status"] = "error"
+            task["error"] = "다운로드에 실패했습니다."
 
 
 def _download_file(task_id: str, url: str, title: str, headers: dict) -> bool:
@@ -319,6 +324,23 @@ def _download_subtitle_file(subtitle_url: str, title: str) -> str | None:
     except Exception:
         pass
     return None
+
+
+def _move_to_final_dir(filename: str):
+    """FINAL_DIR이 설정되어 있으면 파일을 이동한다."""
+    if not FINAL_DIR:
+        return
+    src = os.path.join(DOWNLOAD_DIR, filename)
+    if not os.path.isfile(src):
+        return
+    try:
+        os.makedirs(FINAL_DIR, exist_ok=True)
+        dst = os.path.join(FINAL_DIR, filename)
+        shutil.copy2(src, dst)
+        os.remove(src)
+        print(f"[move] {filename} → {FINAL_DIR}")
+    except Exception as e:
+        print(f"[move] 이동 실패 ({filename}): {e}")
 
 
 def _download_hls(task_id: str, url: str, title: str, headers: dict) -> bool:
