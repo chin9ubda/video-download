@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Downloader</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+
+        /* Input area */
+        .input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 14px 16px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: #4a9eff;
+        }
+
+        .input-group input::placeholder {
+            color: #555;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            background: #4a9eff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover { background: #3a8eef; }
+        .btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+
+        /* Task card */
+        .task-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+
+        .task-url {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+
+        .task-message {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        /* Progress bar */
+        .progress-wrap {
+            background: #2a2a2a;
+            border-radius: 6px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4a9eff, #6db3ff);
+            border-radius: 6px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .progress-bar.done {
+            background: linear-gradient(90deg, #34c759, #5dd87a);
+        }
+
+        .progress-bar.error {
+            background: #ff3b30;
+        }
+
+        .progress-bar.analyzing {
+            background: linear-gradient(90deg, #ff9f0a, #ffb340);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Download link */
+        .download-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #1e3a1e;
+            border: 1px solid #2d5a2d;
+            border-radius: 6px;
+            color: #5dd87a;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .download-link:hover {
+            background: #2a4a2a;
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* File list */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin: 32px 0 12px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+        }
+
+        .file-list {
+            list-style: none;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .file-name {
+            font-size: 14px;
+            color: #ccc;
+            word-break: break-all;
+            flex: 1;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #666;
+            margin-left: 12px;
+            white-space: nowrap;
+        }
+
+        .file-dl {
+            margin-left: 12px;
+            padding: 4px 12px;
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            color: #4a9eff;
+            text-decoration: none;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .file-dl:hover { background: #333; }
+
+        .empty { color: #555; font-size: 13px; padding: 12px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Video Downloader</h1>
+        <p class="subtitle">URL을 입력하면 동영상을 다운로드합니다</p>
+
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="https://example.com/video-page" autocomplete="off">
+            <button class="btn" id="downloadBtn" onclick="startDownload()">다운로드</button>
+        </div>
+
+        <div id="tasks"></div>
+
+        <div class="section-title">다운로드 파일</div>
+        <ul class="file-list" id="fileList">
+            <li class="empty">파일이 없습니다</li>
+        </ul>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const tasksContainer = document.getElementById('tasks');
+
+        urlInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') startDownload();
+        });
+
+        loadFiles();
+
+        function startDownload() {
+            const url = urlInput.value.trim();
+            if (!url) return;
+
+            downloadBtn.disabled = true;
+            urlInput.value = '';
+
+            fetch('/api/download', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url }),
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    downloadBtn.disabled = false;
+                    return;
+                }
+                createTaskCard(data.task_id, url);
+                listenTask(data.task_id);
+                downloadBtn.disabled = false;
+            })
+            .catch(() => {
+                alert('서버 연결에 실패했습니다.');
+                downloadBtn.disabled = false;
+            });
+        }
+
+        function createTaskCard(taskId, url) {
+            const card = document.createElement('div');
+            card.className = 'task-card';
+            card.id = `task-${taskId}`;
+            card.innerHTML = `
+                <div class="task-title" id="title-${taskId}">분석 중...</div>
+                <div class="task-url">${escapeHtml(url)}</div>
+                <div class="task-message" id="msg-${taskId}">대기 중...</div>
+                <div class="progress-wrap">
+                    <div class="progress-bar analyzing" id="bar-${taskId}" style="width: 100%"></div>
+                </div>
+                <div class="progress-info">
+                    <span id="size-${taskId}"></span>
+                    <span id="pct-${taskId}"></span>
+                </div>
+                <div id="action-${taskId}"></div>
+            `;
+            tasksContainer.prepend(card);
+        }
+
+        function listenTask(taskId) {
+            const es = new EventSource(`/api/status/${taskId}`);
+            es.onmessage = (e) => {
+                const d = JSON.parse(e.data);
+                updateTaskCard(taskId, d);
+                if (d.status === 'done' || d.status === 'error' || d.error) {
+                    es.close();
+                    if (d.status === 'done') loadFiles();
+                }
+            };
+            es.onerror = () => {
+                es.close();
+            };
+        }
+
+        function updateTaskCard(taskId, d) {
+            const title = document.getElementById(`title-${taskId}`);
+            const msg = document.getElementById(`msg-${taskId}`);
+            const bar = document.getElementById(`bar-${taskId}`);
+            const size = document.getElementById(`size-${taskId}`);
+            const pct = document.getElementById(`pct-${taskId}`);
+            const action = document.getElementById(`action-${taskId}`);
+
+            if (!title) return;
+
+            if (d.title) title.textContent = d.title;
+            if (d.message) msg.textContent = d.message;
+            if (d.error) {
+                msg.innerHTML = `<span class="error-msg">${escapeHtml(d.error)}</span>`;
+                bar.className = 'progress-bar error';
+                bar.style.width = '100%';
+                return;
+            }
+
+            if (d.status === 'analyzing') {
+                bar.className = 'progress-bar analyzing';
+                bar.style.width = '100%';
+            } else if (d.status === 'downloading') {
+                bar.className = 'progress-bar';
+                bar.style.width = d.progress + '%';
+                if (d.total_size) {
+                    size.textContent = formatSize(d.downloaded) + ' / ' + formatSize(d.total_size);
+                }
+                pct.textContent = d.progress + '%';
+            } else if (d.status === 'done') {
+                bar.className = 'progress-bar done';
+                bar.style.width = '100%';
+                pct.textContent = '100%';
+                if (d.total_size) {
+                    size.textContent = formatSize(d.total_size);
+                }
+                if (d.filename) {
+                    action.innerHTML = `<a class="download-link" href="/api/files/${encodeURIComponent(d.filename)}">파일 저장</a>`;
+                }
+            }
+        }
+
+        function loadFiles() {
+            fetch('/api/files')
+                .then(r => r.json())
+                .then(files => {
+                    const list = document.getElementById('fileList');
+                    if (files.length === 0) {
+                        list.innerHTML = '<li class="empty">파일이 없습니다</li>';
+                        return;
+                    }
+                    list.innerHTML = files.map(f => `
+                        <li class="file-item">
+                            <span class="file-name">${escapeHtml(f.name)}</span>
+                            <span class="file-size">${formatSize(f.size)}</span>
+                            <a class="file-dl" href="/api/files/${encodeURIComponent(f.name)}">저장</a>
+                        </li>
+                    `).join('');
+                });
+        }
+
+        function formatSize(bytes) {
+            if (!bytes) return '';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
+            return (bytes / 1073741824).toFixed(2) + ' GB';
+        }
+
+        function escapeHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+    </script>
+</body>
+</html>

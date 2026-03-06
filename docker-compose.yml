@@ -1,0 +1,11 @@
+services:
+  video-downloader:
+    build: .
+    container_name: video-downloader
+    ports:
+      - "5000:5000"
+    volumes:
+      - /mnt/oracle/video:/app/downloads
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
