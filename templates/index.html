@@ -113,6 +113,13 @@
             color: #5dd87a; text-decoration: none; font-size: 13px; font-weight: 500;
         }
         .download-link:hover { background: #2a4a2a; }
+        .cancel-btn {
+            display: inline-block; margin-top: 10px; padding: 8px 16px;
+            background: #3a1e1e; border: 1px solid #5a2d2d; border-radius: 6px;
+            color: #ff6b6b; font-size: 13px; font-weight: 500; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .cancel-btn:hover { background: #4a2a2a; }
         .error-msg { color: #ff6b6b; font-size: 13px; }
 
         /* File list */
@@ -307,7 +314,7 @@
             es.onmessage = (e) => {
                 const d = JSON.parse(e.data);
                 updateTaskCard(taskId, d);
-                if (d.status === 'done' || d.status === 'error' || d.error) {
+                if (d.status === 'done' || d.status === 'error' || d.status === 'cancelled' || d.error) {
                     es.close();
                     if (d.status === 'done') loadFiles();
                 }
@@ -336,8 +343,14 @@
             if (d.status === 'downloading') {
                 bar.className = 'progress-bar';
                 bar.style.width = d.progress + '%';
-                if (d.total_size) size.textContent = formatSize(d.downloaded) + ' / ' + formatSize(d.total_size);
+                if (d.downloaded) size.textContent = formatSize(d.downloaded) + (d.total_size ? ' / ' + formatSize(d.total_size) : '');
                 pct.textContent = d.progress + '%';
+                action.innerHTML = `<button class="cancel-btn" onclick="cancelTask('${taskId}')">취소</button>`;
+            } else if (d.status === 'cancelled') {
+                bar.className = 'progress-bar error';
+                bar.style.width = d.progress + '%';
+                msg.textContent = '취소됨';
+                action.innerHTML = '';
             } else if (d.status === 'done') {
                 bar.className = 'progress-bar done';
                 bar.style.width = '100%';
@@ -369,10 +382,21 @@
         }
 
         function getExt(url) {
-            const path = (url || '').split('?')[0];
+            if (!url) return 'mp4';
+            if (url.includes('.m3u8') || url.toLowerCase().includes('mpegurl')) return 'mp4';
+            const path = url.split('?')[0];
             const parts = path.split('.');
             const ext = parts.length > 1 ? parts.pop() : 'mp4';
+            if (['html', 'php', 'htm', 'asp'].includes(ext)) return 'mp4';
             return ext.length <= 5 ? ext : 'mp4';
+        }
+
+        function cancelTask(taskId) {
+            fetch(`/api/cancel/${taskId}`, { method: 'POST' })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.error) alert(d.error);
+                });
         }
 
         function esc(str) {

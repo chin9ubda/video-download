@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libcups2 libdrm2 libxkbcommon0 libxcomposite1 \
     libxdamage1 libxrandr2 libgbm1 libpango-1.0-0 \
     libcairo2 libasound2 libatspi2.0-0 libxshmfence1 \
+    ffmpeg openssl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -29,6 +30,6 @@ EXPOSE 5000
 
 CMD ["gunicorn", "server:app", \
      "--bind", "0.0.0.0:5000", \
-     "--workers", "2", \
+     "--workers", "1", \
      "--threads", "4", \
      "--timeout", "0"]
