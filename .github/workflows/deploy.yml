@@ -1,19 +1,24 @@
-name: Build & Deploy
+name: Build & Push to Docker Hub
 
 on:
   push:
     branches: [main]
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t video-downloader:latest .
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      - name: Deploy
+      - name: Build and push
+        run: |
+          docker build -t chanki87/video-downloader:latest .
+          docker push chanki87/video-downloader:latest
+
+      - name: Deploy locally
         run: |
           docker stop video-downloader || true
           docker rm video-downloader || true

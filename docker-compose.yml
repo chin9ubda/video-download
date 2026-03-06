@@ -1,6 +1,6 @@
 services:
   video-downloader:
-    image: video-downloader:latest
+    image: chanki87/video-downloader:latest
     container_name: video-downloader
     ports:
       - "5001:5000"
